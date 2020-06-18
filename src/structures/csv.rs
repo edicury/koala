@@ -11,8 +11,8 @@ pub struct CSV<'a> {
 
 
 impl<'a> CSV<'a> {
-    pub fn get_df(&'a self) -> DataFrame {
-        DataFrame { columns: &self.headers, dataset: &self.matrix }
+    pub fn get_df(&'a mut self) -> DataFrame {
+        DataFrame { columns: &mut self.headers, dataset: &mut self.matrix, values: &mut self.values }
     }
 }
 
@@ -20,6 +20,9 @@ impl<'a> Index<&'a str> for CSV<'a> {
     type Output = Vec<&'a str>;
 
     fn index(&self, index: &'a str) -> &Self::Output {
-        self.values.get(index).unwrap()
+        match self.values.get(index) {
+            Some(v) => v,
+            _ => {panic!("key not present on csv")}
+        }
     }
 }

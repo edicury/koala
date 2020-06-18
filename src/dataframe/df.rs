@@ -3,7 +3,6 @@ use std::io::{BufReader, Read};
 use crate::structures::csv::CSV;
 use std::collections::HashMap;
 
-
 fn into_matrix<'a>(lines: Vec<&'a str>, matrix: &mut Vec<Vec<&'a str>>) -> Vec<Vec<&'a str>>  {
     let mut local_matrix = matrix.clone();
 
