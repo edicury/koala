@@ -87,6 +87,7 @@ impl<'a> DataFrame<'a> {
         panic!("Values are empty")
     }
 
+    /// Returns matrix with boolean meaning if value is N/A
     pub fn is_na(&self, na_matrix: &'a mut Vec<Vec<bool>>) -> &'a mut Vec<Vec<bool>> {
         if self.dataset.len() > 0 {
             let col_size = self.dataset[0].len();
@@ -101,7 +102,7 @@ impl<'a> DataFrame<'a> {
         panic!("Dataset is empty")
 
     }
-
+    /// Returns if col has any N/A value ( true or false )
     pub fn is_na_col(&self, column: &'a str, is_na: &'a mut bool) -> &'a mut bool {
         let values = self.values.get(column).expect("Column not found");
         for row_idx in 0..values.len() {
