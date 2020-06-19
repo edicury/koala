@@ -16,10 +16,10 @@ pub fn test() {
 
     println!("Age min {:?}", df.min("age"));
 
-    df.push("age", "hello");
-    println!("VALUES {:?}", df.values);
+    df.push(["edison", "26"].to_vec());
+    println!("VALUES {:?}", df.dataset);
 
-    df.pop("age");
+    df.pop();
 
     let selected = df.iloc([0..2, 0..1].to_vec());
 

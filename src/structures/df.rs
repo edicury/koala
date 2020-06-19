@@ -54,15 +54,15 @@ impl<'a> IndexMut<&'a str> for DataFrame<'a> {
 #[allow(dead_code)]
 impl<'a> DataFrame<'a> {
     /// Adds new value to the end of the col
-    pub fn push(&mut self, column: &'a str, value: &'a str) {
-        let values = self.values.get_mut(column).expect("Column does not exist");
-        values.push(value);
+    pub fn push(&mut self, value: Vec<&'a str>) {
+        // TODO: change &self.values after push
+        &self.dataset.push(value);
     }
 
     /// Removes last val from col
-    pub fn pop(&mut self, column: &'a str) -> &'a str {
-        let values = self.values.get_mut(column).expect("Column does not exist");
-        values.pop().expect("no value to pop")
+    pub fn pop(&mut self) -> Vec<&'a str> {
+        // TODO: change &self.values after pop
+        self.dataset.pop().expect("no values to pop from dataset")
     }
 
     /// Returns mean as f64 from all values inside given column
