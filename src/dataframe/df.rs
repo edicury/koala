@@ -2,6 +2,7 @@ use std::fs::File;
 use std::io::{BufReader, Read};
 use crate::structures::csv::CSV;
 use std::collections::HashMap;
+use regex::Regex;
 
 fn into_matrix<'a>(lines: Vec<&'a str>, matrix: &mut Vec<Vec<&'a str>>) -> Vec<Vec<&'a str>>  {
     let mut local_matrix = matrix.clone();
@@ -30,22 +31,40 @@ fn into_hashmap<'a>(headers: &Vec<&'a str>, matrix: &Vec<Vec<&'a str>>, hashmap:
     map
 }
 
+fn is_csv_valid(file: &str) -> bool {
+    let lines : Vec<&str> = file.split("\n").collect();
+    let columns : Vec<&str> = lines[0].split(";").collect();
+    let number_of_lines : usize = lines.len();
+    let number_of_cols : usize = columns.len();
+
+    let regex : Regex = Regex::new(r";").unwrap();
+
+    let separators : Vec<&str> = regex.find_iter(file).map(|mat| mat.as_str()).collect();
+    let number_of_separators : usize = separators.len();
+
+    let valid_qty = (number_of_cols - 1) * number_of_lines;
+    number_of_separators == valid_qty
+}
+
 
 pub fn read_csv<'a>(path: &'a str, content: &'a mut String) -> CSV<'a> {
     let file = File::open(path).expect("unable to open file");
     let mut buf_reader = BufReader::new(file);
     buf_reader.read_to_string(content).expect("Unable to transform file into string");
 
-    let lines : Vec<&'a str> = content.split('\n').collect();
-    let headers : Vec<&'a str> = lines[0].split(';').collect();
+    if is_csv_valid(&content) {
+        let lines : Vec<&'a str> = content.split('\n').collect();
+        let headers : Vec<&'a str> = lines[0].split(';').collect();
 
-    let mut raw_matrix : Vec<Vec<&'a str>> = Vec::new();
+        let mut raw_matrix : Vec<Vec<&'a str>> = Vec::new();
 
-    let matrix = into_matrix(lines, &mut raw_matrix);
+        let matrix = into_matrix(lines, &mut raw_matrix);
 
-    let hashmap : HashMap<&str, Vec<&'a str>> = HashMap::new();
+        let hashmap : HashMap<&str, Vec<&'a str>> = HashMap::new();
 
-    let values = into_hashmap(&headers, &matrix, &hashmap);
+        let values = into_hashmap(&headers, &matrix, &hashmap);
 
-    CSV { headers, matrix, values }
+        return CSV { headers, matrix, values }
+    }
+    panic!("CSV is invalid, check separators");
 }
