@@ -127,6 +127,7 @@ impl<'a> DataFrame<'a> {
         is_na
     }
     /// Returns sliced dataset as new owned Vec.
+    // TODO: it would be nice to return a DataFrame instance here.
     pub fn iloc(&self, range: Vec<Range<usize>>) -> Vec<Vec<&'a str>> {
         let matrix = &self.dataset.clone();
 
