@@ -16,7 +16,7 @@ pub fn test() {
 
     println!("Age min {:?}", df.min("age"));
 
-    df.push(["edison", "26"].to_vec());
+    df.push(["edison", "26", "BR"].to_vec());
     println!("VALUES {:?}", df.dataset);
 
     df.pop();

@@ -56,7 +56,12 @@ impl<'a> DataFrame<'a> {
     /// Adds new value to the end of the col
     pub fn push(&mut self, value: Vec<&'a str>) {
         // TODO: change &self.values after push
-        &self.dataset.push(value);
+        if value.len() == self.columns.len() {
+            &self.dataset.push(value);
+        }
+        else {
+            panic!(format!("Value is not valid, number of cols trying to be inserted {:?}, and should be {:?}", value.len(), self.columns.len()))
+        }
     }
 
     /// Removes last val from col
