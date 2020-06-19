@@ -16,39 +16,39 @@ Python's pandas implemented for fast, type safe programming in Rust.
     ### .get_df() -> DataFrame
     returns DataFrame from a CSV struct
     ```rust
-            let mut df = csv.get_df(); // DataFrame { columns, dataset, values }
+           let mut df = csv.get_df(); // DataFrame { columns, dataset, values }
     ```
 
-- Dataframe
+- DataFrame
     ### .columns -> Vec<&str>
     returns array of strings, containing column names
     ```rust
-            df.columns; // ["name","age"]
+           df.columns; // ["name","age"]
     ```
   
      ### .dataset -> Vec<Vec<&str>>
      returns dataset matrix
      ```rust
-             df.dataset; // [["bob","30"]
-                            ["richard", "25"]]
+            df.dataset; // [["bob","30"]
+                           ["richard", "25"]]
      ```
 
      ### .values -> Vec<Pair(&str, Vec<&str>)>
      returns vector of pairs, containing column name, and all column values
      ```rust
-             df.values; // [("name", ["bob", "richard"]), ("age", ["30", "25])]
+            df.values; // [("name", ["bob", "richard"]), ("age", ["30", "25])]
      ```
 
      ### .max(column: &str) -> f64
      returns max from all values inside a column
      ```rust
-             df.max("age"); // 30 as f64
+            df.max("age"); // 30 as f64
      ```
 
      ### .max(column: &str) -> f64
      return min from all values inside a column
      ```rust
-             df.min("age"); // 25 as f64
+            df.min("age"); // 25 as f64
      ```
 
      ### .mean(column: &str) -> f64
