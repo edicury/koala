@@ -24,6 +24,11 @@ pub fn test() {
     let selected = df.iloc([0..2, 0..1].to_vec());
 
     println!("ILoc {:?}", selected);
+
+    let n_uniques = df.n_uniques("age");
+    println!("N Unique Ages {:?}", n_uniques);
+    let uniques = df.uniques("age");
+    println!("Unique ages {:?}", uniques);
 }
 
 

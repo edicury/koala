@@ -3,6 +3,7 @@ use std::collections::HashMap;
 
 use crate::utils::math;
 use crate::utils::parser::parse_to_usize;
+use crate::utils::vec::uniques;
 
 pub struct DataFrame<'a> {
     pub columns : &'a mut Vec<&'a str>,
@@ -151,5 +152,19 @@ impl<'a> DataFrame<'a> {
             let rows = &range[0];
             return matrix[rows.start..rows.end].to_vec();
         }
+    }
+
+    // Return number of unique occurrences on given DataFrame column
+    pub fn n_uniques(&self, column: &str) -> usize {
+        let values = self.values.get(column).expect("Column does not exist");
+        let uniques = uniques(values);
+        uniques.len()
+    }
+
+    // Return unique occurrences on given DataFrame column
+    pub fn uniques(&self, column: &str) -> Vec<&str> {
+        let values = self.values.get(column).expect("Column does not exist");
+        let uniques = uniques(values);
+        uniques
     }
 }

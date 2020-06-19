@@ -101,3 +101,15 @@ Python's pandas implemented for fast, type safe programming in Rust.
            df.pop(); // ["bob", "25"]
            df.dataset; // [["richard", "30"]]
      ```
+  
+     ### .n_uniques(column: &str) -> usize
+     returns matrix containing missing value bool for each value
+     ```rust
+          df.n_uniques("age"); // 2 as usize
+     ```
+    
+     ### .uniques(column: &str) -> Vec<&str>
+     returns matrix containing missing value bool for each value
+     ```rust
+         df.uniques("age"); // ["30", "25"]
+     ```

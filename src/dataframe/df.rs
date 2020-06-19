@@ -39,8 +39,8 @@ fn is_csv_valid(file: &str) -> bool {
 
     let regex : Regex = Regex::new(r";").unwrap();
 
-    let separators : Vec<&str> = regex.find_iter(file).map(|mat| mat.as_str()).collect();
-    let number_of_separators : usize = separators.len();
+    let separators = regex.find_iter(file);
+    let number_of_separators : usize = separators.count();
 
     let valid_qty = (number_of_cols - 1) * number_of_lines;
     number_of_separators == valid_qty
