@@ -10,25 +10,32 @@ pub fn test() {
 
     let mut df = csv.get_df();
 
-    println!("Age mean {:?}", df.mean("age"));
+//    println!("Age mean {:?}", df.mean("age"));
+//
+//    println!("Age max {:?}", df.max("age"));
+//
+//    println!("Age min {:?}", df.min("age"));
+//
+//    df.push(["edison", "26", "BR"].to_vec());
+//    println!("VALUES {:?}", df.dataset);
+//
+//    df.pop();
 
-    println!("Age max {:?}", df.max("age"));
+//    let selected = df.iloc([0..2, 0..1].to_vec());
 
-    println!("Age min {:?}", df.min("age"));
+//    println!("ILoc {:?}", selected);
 
-    df.push(["edison", "26", "BR"].to_vec());
-    println!("VALUES {:?}", df.dataset);
+//    let n_uniques = df.n_uniques("age");
+//    println!("N Unique Ages {:?}", n_uniques);
+//    let uniques = df.uniques("age");
+//    println!("Unique ages {:?}", uniques);
 
-    df.pop();
+    fn applier<'r> (age: &str) -> &'r str {
+        "hello"
+    }
 
-    let selected = df.iloc([0..2, 0..1].to_vec());
-
-    println!("ILoc {:?}", selected);
-
-    let n_uniques = df.n_uniques("age");
-    println!("N Unique Ages {:?}", n_uniques);
-    let uniques = df.uniques("age");
-    println!("Unique ages {:?}", uniques);
+    df.apply("age", applier);
+    println!("DF {:?}", df.dataset);
 }
 
 

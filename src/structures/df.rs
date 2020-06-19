@@ -1,9 +1,9 @@
-use std::ops::{Index, IndexMut, Range};
+use std::ops::{Index, IndexMut, Range, Deref};
 use std::collections::HashMap;
 
 use crate::utils::math;
 use crate::utils::parser::parse_to_usize;
-use crate::utils::vec::uniques;
+use crate::utils::vec::{uniques, find_index};
 
 pub struct DataFrame<'a> {
     pub columns : &'a mut Vec<&'a str>,
@@ -167,5 +167,19 @@ impl<'a> DataFrame<'a> {
         let values = self.values.get(column).expect("Column does not exist");
         let uniques = uniques(values);
         uniques
+    }
+
+    // Applies closure function on given column and changes dataset to new value
+    pub fn apply(&mut self, column: &str, function: for<'r> fn(&'r str) -> &'a str) {
+        let col_idx = find_index(column, self.columns).expect("Column does not exist");
+        let values : Vec<&str> = self.values.get_mut(column).expect("Column does not exist").to_vec().iter().map(|x| x.deref()).map(function).collect();
+
+        for i in 0..self.dataset.len() {
+            for j in 0..self.dataset[i].len() {
+                if j == col_idx {
+                    self.dataset[i][j] = values[i];
+                }
+            }
+        }
     }
 }

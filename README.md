@@ -113,3 +113,11 @@ Python's pandas implemented for fast, type safe programming in Rust.
      ```rust
          df.uniques("age"); // ["30", "25"]
      ```
+    
+     ### .apply(column: &str, function: for<'r> fn(&'r str) -> &'a str)
+     applies closure function to each value on given column
+     ```rust
+         fn in_my_twenties<'r>(age: &str) -> &'r str { "20" }   
+         df.apply("age", in_my_twenties);
+         df.dataset; // [["richard", "20"], ["bob", "20"]]
+     ```
