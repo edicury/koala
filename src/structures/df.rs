@@ -47,6 +47,7 @@ impl<'a> IndexMut<&'a str> for DataFrame<'a> {
     }
 }
 
+#[allow(dead_code)]
 impl<'a> DataFrame<'a> {
     /// Adds new value to the end of the col
     pub fn push(&mut self, column: &'a str, value: &'a str) {
@@ -88,7 +89,9 @@ impl<'a> DataFrame<'a> {
     }
 
     /// Returns matrix with boolean meaning if value is N/A
-    pub fn is_na(&self, na_matrix: &'a mut Vec<Vec<bool>>) -> &'a mut Vec<Vec<bool>> {
+    pub fn is_na(&self) -> Vec<Vec<bool>> {
+        let mut na_matrix: Vec<Vec<bool>> = Vec::new();
+
         if self.dataset.len() > 0 {
             let col_size = self.dataset[0].len();
             for row_idx in 0..self.dataset.len() {
@@ -103,11 +106,12 @@ impl<'a> DataFrame<'a> {
 
     }
     /// Returns if col has any N/A value ( true or false )
-    pub fn is_na_col(&self, column: &'a str, is_na: &'a mut bool) -> &'a mut bool {
+    pub fn is_na_col(&self, column: &str) -> bool {
+        let mut is_na = false;
         let values = self.values.get(column).expect("Column not found");
         for row_idx in 0..values.len() {
             if values[row_idx] == "" {
-                *is_na = true;
+                is_na = true;
                 break;
             }
         }
