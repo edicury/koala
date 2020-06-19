@@ -20,6 +20,10 @@ pub fn test() {
     println!("VALUES {:?}", df.values);
 
     df.pop("age");
+
+    let selected = df.iloc([0..2, 0..1].to_vec());
+
+    println!("ILoc {:?}", selected);
 }
 
 

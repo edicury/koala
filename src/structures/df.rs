@@ -1,7 +1,8 @@
-use std::ops::{Index, IndexMut};
+use std::ops::{Index, IndexMut, Range};
 use std::collections::HashMap;
 
 use crate::utils::math;
+use crate::utils::parser::parse_to_usize;
 
 pub struct DataFrame<'a> {
     pub columns : &'a mut Vec<&'a str>,
@@ -47,6 +48,9 @@ impl<'a> IndexMut<&'a str> for DataFrame<'a> {
     }
 }
 
+
+
+/// Implementation methods
 #[allow(dead_code)]
 impl<'a> DataFrame<'a> {
     /// Adds new value to the end of the col
@@ -72,7 +76,7 @@ impl<'a> DataFrame<'a> {
     pub fn max(&self, column: &'a str) -> f64 {
         let values = &self.values[column];
         if values.len() > 0 {
-            let mut max : f64 = values[0].parse().expect("Value is not a number");
+            let mut max : f64 = parse_to_usize(values[0]) as f64;
             return math::max(values, &mut max)
         }
         panic!("Values are empty")
@@ -82,7 +86,7 @@ impl<'a> DataFrame<'a> {
     pub fn min(&self, column: &'a str) -> f64 {
         let values = &self.values[column];
         if values.len() > 0 {
-            let mut min : f64 = values[0].parse().expect("Value is not a number");
+            let mut min : f64 = parse_to_usize(values[0]) as f64;
             return math::min(values, &mut min)
         }
         panic!("Values are empty")
@@ -103,7 +107,6 @@ impl<'a> DataFrame<'a> {
             return na_matrix
         }
         panic!("Dataset is empty")
-
     }
     /// Returns if col has any N/A value ( true or false )
     pub fn is_na_col(&self, column: &str) -> bool {
@@ -116,5 +119,32 @@ impl<'a> DataFrame<'a> {
             }
         }
         is_na
+    }
+    /// Returns sliced dataset as new owned Vec.
+    pub fn iloc(&self, range: Vec<Range<usize>>) -> Vec<Vec<&'a str>> {
+        let matrix = &self.dataset.clone();
+
+        if range.len() > 2 || range.len() == 0 {
+            panic!("Invalid range to loc");
+        } else if range.len() == 2 {
+            let rows = &range[0];
+            let cols = &range[1];
+            if rows.end > matrix.len() || cols.end > matrix[0].len() {
+                panic!("Invalid ranges for row or column");
+            }
+            let mut sliced_matrix: Vec<Vec<&str>> = Vec::new();
+
+            for i in rows.start..rows.end {
+                sliced_matrix.push(Vec::new());
+                for j in cols.start..cols.end {
+                    sliced_matrix[i].push(matrix[i][j]);
+                }
+            }
+
+            sliced_matrix
+        } else {
+            let rows = &range[0];
+            return matrix[rows.start..rows.end].to_vec();
+        }
     }
 }
