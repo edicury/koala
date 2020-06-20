@@ -6,7 +6,8 @@ use std::ops::Index;
 pub struct CSV<'a> {
     pub headers: Vec<&'a str>,
     pub matrix: Vec<Vec<&'a str>>,
-    pub values : HashMap<&'a str, Vec<&'a str>>
+    pub values : HashMap<&'a str, Vec<&'a str>>,
+    pub separator: &'a str
 }
 
 

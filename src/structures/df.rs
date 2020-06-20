@@ -182,4 +182,19 @@ impl<'a> DataFrame<'a> {
             }
         }
     }
+
+    // Applies value to any na value inside column
+    pub fn fillna(&mut self, column: &str, value: &'a str) {
+        let col_idx = find_index(column, self.columns).expect("Column does not exist");
+
+        for i in 0..self.dataset.len() {
+            for j in 0..self.dataset[i].len() {
+                if j == col_idx {
+                    if self.dataset[i][j] == "" {
+                        self.dataset[i][j] = value;
+                    }
+                }
+            }
+        }
+    }
 }
