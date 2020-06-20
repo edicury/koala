@@ -1,4 +1,5 @@
 use crate::utils::vec::non_na_vec;
+use std::ops::Deref;
 
 pub fn mean(values: &Vec<&str>, mean: &mut f64) -> f64 {
     let non_empty : Vec<&str> = non_na_vec(values);
@@ -43,4 +44,15 @@ pub fn min(values: &Vec<&str>, min: &mut f64) -> f64 {
         }
     }
     *min
+}
+
+pub fn sum(values: &Vec<&str>) -> f64 {
+    let non_empty: Vec<&str> = non_na_vec(values);
+
+    let mut total: f64 = 0 as f64;
+    for val in non_empty.iter() {
+        let fval: f64 = val.deref().parse().expect("Value is not a number");
+        total += fval;
+    }
+    total
 }

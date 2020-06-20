@@ -8,9 +8,11 @@ pub mod globals;
 
 pub fn test() {
     let mut content = String::new();
-    let mut csv = dataframe::df::read_csv("test.csv", &mut content, None);
+    let mut csv = dataframe::df::read_csv("/Users/edisoncury/Documents/Development/Rust/koala/src/test.csv", &mut content, None);
 
     let df = csv.get_df();
+
+    println!("Spent Sum ${:?}", df.sum("spent"));
 }
 
 

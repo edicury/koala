@@ -56,6 +56,12 @@ Python's pandas implemented for fast, type safe programming in Rust.
      ```rust
             df.mean("age"); // 27.5 as f64
      ```
+  
+    ### .sum(column: &str) -> f64
+    returns sum of all non N/A values from column
+    ```rust
+           df.sum("age"); // 55 as f64
+    ```
 
      ### [&str] -> Vec<&str>
      string index for DataFrame, returns all values from a given column

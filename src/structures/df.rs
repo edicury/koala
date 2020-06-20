@@ -98,6 +98,14 @@ impl<'a> DataFrame<'a> {
         panic!("Values are empty")
     }
 
+    pub fn sum(&self, column: &'a str) -> f64 {
+        let values = &self.values[column];
+        if values.len() > 0 {
+            return math::sum(values)
+        }
+        panic!("Values are empty")
+    }
+
     /// Returns matrix with boolean meaning if value is N/A
     pub fn is_na(&self) -> Vec<Vec<bool>> {
         let mut na_matrix: Vec<Vec<bool>> = Vec::new();
