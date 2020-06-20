@@ -121,3 +121,9 @@ Python's pandas implemented for fast, type safe programming in Rust.
          df.apply("age", in_my_twenties);
          df.dataset; // [["richard", "20"], ["bob", "20"]]
      ```
+    
+    ### .fillna(column: &str, value: &str)
+    assigns given value to each N/A value on column
+    ```rust
+       df.fillna("age", df.mean("age")); // [["richard", "26"], ["bob", "26"]] given bob had no prior age
+    ```
