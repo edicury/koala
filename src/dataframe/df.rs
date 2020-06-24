@@ -1,14 +1,24 @@
+#[allow(dead_code)]
+
 use std::fs::File;
 use std::io::{BufReader, Read};
 use crate::structures::csv::CSV;
 use std::collections::HashMap;
-use regex::Regex;
+use regex::{Regex, Matches};
+use std::ops::Deref;
+use std::borrow::{Cow, Borrow, BorrowMut};
+use std::cell::Cell;
 
-fn into_matrix<'a>(lines: Vec<&'a str>, matrix: &mut Vec<Vec<&'a str>>, separator: &'a str) -> Vec<Vec<&'a str>>  {
+fn into_matrix<'a>(lines: Vec<&'a str>, matrix: &mut Vec<Vec<&'a str>>, headers: &Vec<&'a str>, separator: &'a str) -> Vec<Vec<&'a str>>  {
     let mut local_matrix = matrix.clone();
 
     for line_idx in 1..lines.len() {
-        let row : Vec<&'a str> = lines[line_idx].split(separator).collect();
+        let mut row : Vec<&'a str> = lines[line_idx].split(separator).collect();
+        if row.len() != headers.len()  {
+            for _ in 0..headers.len() {
+                row.insert(0, "")
+            }
+        }
         local_matrix.push(row);
     }
     local_matrix.to_vec()
@@ -17,7 +27,6 @@ fn into_matrix<'a>(lines: Vec<&'a str>, matrix: &mut Vec<Vec<&'a str>>, separato
 
 fn into_hashmap<'a>(headers: &Vec<&'a str>, matrix: &Vec<Vec<&'a str>>, hashmap: &HashMap<&'a str, Vec<&'a str>>) -> HashMap<&'a str, Vec<&'a str>> {
     let mut map = hashmap.clone();
-
     for header_idx in 0..headers.len() {
         let header : &'a str = headers[header_idx];
         let mut row : Vec<&'a str> = Vec::new();
@@ -32,7 +41,7 @@ fn into_hashmap<'a>(headers: &Vec<&'a str>, matrix: &Vec<Vec<&'a str>>, hashmap:
 }
 
 fn is_csv_valid(file: &str, separator: &str) -> bool {
-    let lines: Vec<&str> = file.split("\n").collect();
+    let lines: Vec<&str> = file.lines().collect();
     let columns : Vec<&str> = lines[0].split(separator).collect();
 
     let number_of_lines : usize = lines.len();
@@ -56,20 +65,13 @@ pub fn read_csv<'a>(path: &'a str, content: &'a mut String, separator: Option<&'
     let mut buf_reader = BufReader::new(file);
     buf_reader.read_to_string(content).expect("Unable to transform file into string");
 
-    if is_csv_valid(&content,sep) {
-        let lines : Vec<&'a str> = content.split('\n').collect();
+    let mut lines : Vec<&'a str> = content.lines().collect();
+    let headers : Vec<&'a str> = lines[0].split(sep).collect();
+    let mut raw_matrix : Vec<Vec<&'a str>> = Vec::new();
 
-        let headers : Vec<&'a str> = lines[0].split(sep).collect();
+    let matrix = into_matrix(lines, &mut raw_matrix, &headers, sep);
+    let hashmap : HashMap<&str, Vec<&'a str>> = HashMap::new();
 
-        let mut raw_matrix : Vec<Vec<&'a str>> = Vec::new();
-
-        let matrix = into_matrix(lines, &mut raw_matrix, sep);
-
-        let hashmap : HashMap<&str, Vec<&'a str>> = HashMap::new();
-
-        let values = into_hashmap(&headers, &matrix, &hashmap);
-
-        return CSV { headers, matrix, values, separator: sep }
-    }
-    panic!("CSV is invalid, check separators");
+    let values = into_hashmap(&headers, &matrix, &hashmap);
+    return CSV { headers, matrix, values, separator: sep }
 }

@@ -3,7 +3,8 @@ use std::collections::HashMap;
 
 use crate::utils::math;
 use crate::utils::parser::parse_to_usize;
-use crate::utils::vec::{uniques, find_index};
+use crate::utils::vec::{uniques, find_index, to_hashmap};
+use std::borrow::BorrowMut;
 
 pub struct DataFrame<'a> {
     pub columns : &'a mut Vec<&'a str>,
@@ -189,6 +190,8 @@ impl<'a> DataFrame<'a> {
                 }
             }
         }
+
+        to_hashmap(self.columns, self.dataset, self.values)
     }
 
     // Applies value to any na value inside column
@@ -204,5 +207,7 @@ impl<'a> DataFrame<'a> {
                 }
             }
         }
+
+        to_hashmap(self.columns, self.dataset, self.values)
     }
 }
