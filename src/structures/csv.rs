@@ -7,13 +7,14 @@ pub struct CSV<'a> {
     pub headers: Vec<&'a str>,
     pub matrix: Vec<Vec<&'a str>>,
     pub values : HashMap<&'a str, Vec<&'a str>>,
+    pub types: HashMap<&'a str, &'a str>,
     pub separator: &'a str
 }
 
 
 impl<'a> CSV<'a> {
     pub fn get_df(&'a mut self) -> DataFrame {
-        DataFrame { columns: &mut self.headers, dataset: &mut self.matrix, values: &mut self.values }
+        DataFrame { columns: &mut self.headers, dataset: &mut self.matrix, values: &mut self.values, dtypes: &mut self.types }
     }
 }
 

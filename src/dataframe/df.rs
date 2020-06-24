@@ -8,6 +8,7 @@ use regex::{Regex, Matches};
 use std::ops::Deref;
 use std::borrow::{Cow, Borrow, BorrowMut};
 use std::cell::Cell;
+use crate::utils::types::get_type_from_vec;
 
 fn into_matrix<'a>(lines: Vec<&'a str>, matrix: &mut Vec<Vec<&'a str>>, headers: &Vec<&'a str>, separator: &'a str) -> Vec<Vec<&'a str>>  {
     let mut local_matrix = matrix.clone();
@@ -28,7 +29,6 @@ fn into_matrix<'a>(lines: Vec<&'a str>, matrix: &mut Vec<Vec<&'a str>>, headers:
 fn into_hashmap<'a>(headers: &Vec<&'a str>, matrix: &Vec<Vec<&'a str>>, hashmap: &HashMap<&'a str, Vec<&'a str>>) -> HashMap<&'a str, Vec<&'a str>> {
     let mut map = hashmap.clone();
     for header_idx in 0..headers.len() {
-        let header : &'a str = headers[header_idx];
         let mut row : Vec<&'a str> = Vec::new();
 
         for row_idx in 0..matrix.len() {
@@ -58,6 +58,14 @@ fn is_csv_valid(file: &str, separator: &str) -> bool {
     number_of_separators == valid_qty
 }
 
+fn get_types<'a>(values: &HashMap<&'a str, Vec<&'a str>>, columns: &Vec<&'a str>, types: &mut HashMap<&'a str, &'a str>) {
+    for col in columns.iter() {
+        let val_type = get_type_from_vec(values.get(col).expect("Column does not exist"));
+
+        types.insert(col, val_type);
+    }
+}
+
 
 pub fn read_csv<'a>(path: &'a str, content: &'a mut String, separator: Option<&'a str>) -> CSV<'a> {
     let sep = separator.unwrap_or(";");
@@ -71,7 +79,10 @@ pub fn read_csv<'a>(path: &'a str, content: &'a mut String, separator: Option<&'
 
     let matrix = into_matrix(lines, &mut raw_matrix, &headers, sep);
     let hashmap : HashMap<&str, Vec<&'a str>> = HashMap::new();
+    let mut types: HashMap<&'a str, &'a str> = HashMap::new();
 
     let values = into_hashmap(&headers, &matrix, &hashmap);
-    return CSV { headers, matrix, values, separator: sep }
+    get_types(&values, &headers, &mut types);
+
+    return CSV { headers, matrix, values, separator: sep, types }
 }

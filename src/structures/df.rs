@@ -5,11 +5,13 @@ use crate::utils::math;
 use crate::utils::parser::parse_to_usize;
 use crate::utils::vec::{uniques, find_index, to_hashmap};
 use std::borrow::BorrowMut;
+use crate::utils::types::get_type_from_vec;
 
 pub struct DataFrame<'a> {
     pub columns : &'a mut Vec<&'a str>,
     pub dataset : &'a mut Vec<Vec<&'a str>>,
-    pub values : &'a mut HashMap<&'a str, Vec<&'a str>>
+    pub values : &'a mut HashMap<&'a str, Vec<&'a str>>,
+    pub dtypes: &'a mut HashMap<&'a str, &'a str>
 }
 
 /// Accessor for rows inside dataframe.
