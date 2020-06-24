@@ -10,8 +10,6 @@ license = "MIT OR Apache-2.0"
 [lib]
 name = "koala"
 path = "src/lib.rs"
-[[bin]]
-name = "koala"
-path = "src/bin.rs"
+
 [dependencies]
 regex = "1"
