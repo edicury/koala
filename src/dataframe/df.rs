@@ -30,6 +30,7 @@ fn into_hashmap<'a>(headers: &Vec<&'a str>, matrix: &Vec<Vec<&'a str>>, hashmap:
     let mut map = hashmap.clone();
     for header_idx in 0..headers.len() {
         let mut row : Vec<&'a str> = Vec::new();
+        let header = headers[header_idx];
 
         for row_idx in 0..matrix.len() {
             let value = matrix[row_idx][header_idx];

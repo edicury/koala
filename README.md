@@ -133,3 +133,9 @@ Python's pandas implemented for fast, type safe programming in Rust.
     ```rust
        df.fillna("age", df.mean("age")); // [["richard", "26"], ["bob", "26"]] given bob had no prior age
     ```
+  
+    ### .dtypes -> HashMap<&str, &str>
+    returns type of each column
+    ```rust
+      df.dtypes // {"age": "numeric", "name": "str" }
+    ```
