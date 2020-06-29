@@ -50,8 +50,6 @@ impl<'a> IndexMut<&'a str> for DataFrame<'a> {
     }
 }
 
-
-
 /// Implementation methods
 #[allow(dead_code)]
 impl<'a> DataFrame<'a> {
