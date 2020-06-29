@@ -1,13 +1,8 @@
-#[allow(dead_code)]
-
 use std::fs::File;
 use std::io::{BufReader, Read};
 use crate::structures::csv::CSV;
 use std::collections::HashMap;
-use regex::{Regex, Matches};
-use std::ops::Deref;
-use std::borrow::{Cow, Borrow, BorrowMut};
-use std::cell::Cell;
+use regex::{Regex};
 use crate::utils::types::get_type_from_vec;
 
 fn into_matrix<'a>(lines: Vec<&'a str>, matrix: &mut Vec<Vec<&'a str>>, headers: &Vec<&'a str>, separator: &'a str) -> Vec<Vec<&'a str>>  {
@@ -41,6 +36,7 @@ fn into_hashmap<'a>(headers: &Vec<&'a str>, matrix: &Vec<Vec<&'a str>>, hashmap:
     map
 }
 
+#[allow(dead_code)]
 fn is_csv_valid(file: &str, separator: &str) -> bool {
     let lines: Vec<&str> = file.lines().collect();
     let columns : Vec<&str> = lines[0].split(separator).collect();
@@ -74,7 +70,7 @@ pub fn read_csv<'a>(path: &'a str, content: &'a mut String, separator: Option<&'
     let mut buf_reader = BufReader::new(file);
     buf_reader.read_to_string(content).expect("Unable to transform file into string");
 
-    let mut lines : Vec<&'a str> = content.lines().collect();
+    let lines : Vec<&'a str> = content.lines().collect();
     let headers : Vec<&'a str> = lines[0].split(sep).collect();
     let mut raw_matrix : Vec<Vec<&'a str>> = Vec::new();
 

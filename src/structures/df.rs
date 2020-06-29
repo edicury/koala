@@ -4,8 +4,6 @@ use std::collections::HashMap;
 use crate::utils::math;
 use crate::utils::parser::parse_to_usize;
 use crate::utils::vec::{uniques, find_index, to_hashmap};
-use std::borrow::BorrowMut;
-use crate::utils::types::get_type_from_vec;
 
 pub struct DataFrame<'a> {
     pub columns : &'a mut Vec<&'a str>,
@@ -211,5 +209,25 @@ impl<'a> DataFrame<'a> {
         }
 
         to_hashmap(self.columns, self.dataset, self.values)
+    }
+
+    pub fn column_as_f64(&mut self, column: &str) -> Vec<f64> {
+        let values = self.values.get(column).expect("Column does not exist");
+        let mut parsed_values : Vec<f64> = Vec::new();
+        for i in values.iter() {
+            let value : f64 = i.parse().expect("Could not parse to f64");
+            parsed_values.push(value);
+        }
+        parsed_values
+    }
+
+    pub fn column_as_bool(&mut self, column: &str) -> Vec<bool> {
+        let values = self.values.get(column).expect("Column does not exist");
+        let mut parsed_values : Vec<bool> = Vec::new();
+        for i in values.iter() {
+            let value : bool = i.to_lowercase().parse().expect("Could not parse to bool");
+            parsed_values.push(value);
+        }
+        parsed_values
     }
 }

@@ -13,8 +13,7 @@ pub fn get_type(val: &str) -> &str {
     let bool_re = Regex::new(bool).unwrap();
 
     let is_numeric = numeric_re.is_match(val);
-    let is_bool = numeric_re.is_match(val);
-
+    let is_bool = bool_re.is_match(val);
     if is_numeric {
         "numeric"
     } else if is_bool {
